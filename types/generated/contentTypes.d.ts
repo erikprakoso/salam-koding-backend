@@ -803,11 +803,15 @@ export interface ApiArticleArticle extends Schema.CollectionType {
     title: Attribute.String;
     body: Attribute.Blocks;
     thumbnail: Attribute.Media;
-    author: Attribute.String;
     tags: Attribute.Relation<
       'api::article.article',
-      'oneToMany',
+      'manyToMany',
       'api::tag.tag'
+    >;
+    author: Attribute.Relation<
+      'api::article.article',
+      'manyToOne',
+      'api::author.author'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -827,12 +831,50 @@ export interface ApiArticleArticle extends Schema.CollectionType {
   };
 }
 
+export interface ApiAuthorAuthor extends Schema.CollectionType {
+  collectionName: 'authors';
+  info: {
+    singularName: 'author';
+    pluralName: 'authors';
+    displayName: 'Author';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    fullname: Attribute.String;
+    position: Attribute.String;
+    thumbnail: Attribute.Media;
+    articles: Attribute.Relation<
+      'api::author.author',
+      'oneToMany',
+      'api::article.article'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::author.author',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::author.author',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiTagTag extends Schema.CollectionType {
   collectionName: 'tags';
   info: {
     singularName: 'tag';
     pluralName: 'tags';
     displayName: 'Tag';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -840,9 +882,9 @@ export interface ApiTagTag extends Schema.CollectionType {
   attributes: {
     name: Attribute.String;
     color: Attribute.String;
-    article: Attribute.Relation<
+    articles: Attribute.Relation<
       'api::tag.tag',
-      'manyToOne',
+      'manyToMany',
       'api::article.article'
     >;
     createdAt: Attribute.DateTime;
@@ -874,6 +916,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
       'api::article.article': ApiArticleArticle;
+      'api::author.author': ApiAuthorAuthor;
       'api::tag.tag': ApiTagTag;
     }
   }

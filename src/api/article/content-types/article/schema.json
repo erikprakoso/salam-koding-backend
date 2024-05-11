@@ -26,14 +26,17 @@
         "images"
       ]
     },
-    "author": {
-      "type": "string"
-    },
     "tags": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::tag.tag",
-      "mappedBy": "article"
+      "inversedBy": "articles"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::author.author",
+      "inversedBy": "articles"
     }
   }
 }
