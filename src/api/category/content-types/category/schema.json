@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "tags",
+  "collectionName": "categories",
   "info": {
-    "singularName": "tag",
-    "pluralName": "tags",
-    "displayName": "Tag",
+    "singularName": "category",
+    "pluralName": "categories",
+    "displayName": "Category",
     "description": ""
   },
   "options": {
@@ -18,11 +18,19 @@
     "color": {
       "type": "string"
     },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "articles": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::article.article",
-      "mappedBy": "tags"
+      "inversedBy": "categories"
     }
   }
 }
